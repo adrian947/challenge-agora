@@ -3,6 +3,7 @@ import { connectToDatabase } from './config/configDB';
 import seedRouter from './routes/seed.route';
 import healthRouter from './routes/health.route';
 import postsRouter from './routes/posts.route';
+import { buildLogger } from './plugins/logger.plugin';
 
 
 
@@ -20,7 +21,8 @@ app.use('/api', postsRouter);
 
 connectToDatabase();
 
+const logger = buildLogger('index.ts')
 
 app.listen(PORT, () => {
-    console.log(`Servidor Express iniciado en el puerto!! ${PORT}`);
+    logger.info(`Express server started on port ${PORT}!`);    
 });

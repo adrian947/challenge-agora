@@ -25,6 +25,7 @@
     "bcrypt": "^5.1.1",
     "express": "^4.19.1",
     "mongodb": "^6.5.0",
-    "node-cache": "^5.1.2"
+    "node-cache": "^5.1.2",
+    "winston": "^3.12.0"
   }
 }

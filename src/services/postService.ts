@@ -13,7 +13,7 @@ export const postsService = async (): Promise<PostsService> => {
 
     return {
         getAll: async () => {
-            try {
+            try {                
                 const posts = await postsCollection.aggregate([
                     {
                         $lookup: {

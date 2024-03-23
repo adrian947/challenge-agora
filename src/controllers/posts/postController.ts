@@ -1,7 +1,9 @@
 import { Request, Response } from 'express';
 import { postsService } from '../../services/postService';
 import NodeCache from 'node-cache';
+import { buildLogger } from '../../plugins/logger.plugin';
 const cache = new NodeCache();
+const logger = buildLogger('postController.ts')
 
 export const findAllPostController = async (req: Request, res: Response) => {
     try {
@@ -14,6 +16,7 @@ export const findAllPostController = async (req: Request, res: Response) => {
         cache.set('allPosts', posts, 60);
         res.status(200).json(posts);
     } catch (error) {
+        logger.error(error)
         res.status(500).json({ error: 'Error fetching all posts.' });
     }
 };
@@ -36,6 +39,7 @@ export const findPostByIdController = async (req: Request, res: Response) => {
         cache.set('post', post, 60);
         res.status(200).json(post);
     } catch (error) {        
+        logger.error(error)
         res.status(500).json({ error: 'Error fetching post by id.' });
     }
 };
