@@ -13,18 +13,17 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-const whitelist = [process.env.URL_BACKEND]
-const corsOptions = {
-  origin: function (origin: any, callback: any) {        
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
+const whitelist = ['http://example1.com', 'http://example2.com']
+const corsOptionsDelegate = function (req: any, callback: any) {
+    let corsOptions;
+  if (whitelist.indexOf(req.header('Origin')) !== -1) {
+    corsOptions = { origin: true }
+  } else {
+    corsOptions = { origin: false }
   }
+  callback(null, corsOptions)
 }
-app.use(cors(corsOptions));
-
+cors(corsOptionsDelegate)
 app.use(express.json());
 app.use('/api', seedRouter);
 app.use('/api', healthRouter);
