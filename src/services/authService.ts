@@ -1,5 +1,5 @@
 import { Collection, ObjectId } from 'mongodb';
-import { connectToDatabase } from "../config/configDB";
+import { database } from "../config/configDB";
 
 interface User {
     _id: ObjectId;
@@ -8,7 +8,7 @@ interface User {
 }
 
 export const authService = async () => {
-    const db = await connectToDatabase();
+    const db = await database.connectToDatabase();
     const usersCollection: Collection<User> = db.collection<User>('users');
 
     return {

@@ -9,7 +9,7 @@ import express from 'express';
 import { checkAuth } from '../middlewares/checkAuth';
 const postsRouter = express.Router();
 
-postsRouter.get('/posts', checkAuth, findAllPostController);
+postsRouter.get('/posts', findAllPostController);
 postsRouter.get('/posts/:id', checkAuth, findPostByIdController);
 postsRouter.post('/posts', checkAuth, createPostController);
 postsRouter.patch('/posts/:id', checkAuth, updatePostController);

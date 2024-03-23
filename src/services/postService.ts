@@ -1,5 +1,5 @@
 import { Collection, DeleteResult, Document, InsertOneResult, ObjectId, UpdateResult } from 'mongodb';
-import { connectToDatabase } from "../config/configDB";
+import { database } from "../config/configDB";
 
 interface Post {
     _id?: ObjectId;
@@ -17,7 +17,7 @@ interface PostsService {
 }
 
 export const postsService = async (): Promise<PostsService> => {
-    const db = await connectToDatabase();
+    const db = await database.connectToDatabase();
     const postsCollection: Collection = db.collection('posts');
     
     return {

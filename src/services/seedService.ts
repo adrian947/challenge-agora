@@ -1,9 +1,9 @@
 import bcrypt from 'bcrypt';
-import { connectToDatabase } from '../config/configDB';
+import { database } from '../config/configDB';
 
 export const seedService = async () => {
     try {
-        const db = await connectToDatabase();
+        const db = await database.connectToDatabase();
         const usersCollection = db.collection('users');
         const postsCollection = db.collection('posts');
         const usersCount = await usersCollection.countDocuments();
