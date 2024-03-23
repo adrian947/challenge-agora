@@ -1,16 +1,25 @@
-import { Collection, Document, ObjectId } from 'mongodb';
+import { Collection, DeleteResult, Document, InsertOneResult, ObjectId, UpdateResult } from 'mongodb';
 import { connectToDatabase } from "../config/configDB";
+
+interface Post {
+    _id?: ObjectId;
+    quote: string;    
+    user_id: ObjectId;
+    date: Date;
+}
 
 interface PostsService {
     getAll: () => Promise<Document[]>;
-    findPostById: (postId: string) => Promise<Document | null>;
+    findPostById: (postId: ObjectId) => Promise<Document | null>;
+    createPost: (quote: string, userId: string) => Promise<InsertOneResult | null>;
+    updatePost: (postId: ObjectId, updatedQuote: string) => Promise<UpdateResult | null>;
+    deletePost: (postId: ObjectId) => Promise<DeleteResult | null>;
 }
 
 export const postsService = async (): Promise<PostsService> => {
     const db = await connectToDatabase();
     const postsCollection: Collection = db.collection('posts');
-    const usersCollection: Collection = db.collection('users');
-
+    
     return {
         getAll: async () => {
             try {                
@@ -43,7 +52,7 @@ export const postsService = async (): Promise<PostsService> => {
                 throw new Error('Error fetching all posts.');
             }
         },
-        findPostById: async (postId: string) => {
+        findPostById: async (postId: ObjectId) => {
             try {
                 const post = await postsCollection.aggregate([
                     {
@@ -66,8 +75,7 @@ export const postsService = async (): Promise<PostsService> => {
                             quote: 1,
                             date: 1,
                             'user.name': 1,
-                            'user.email': 1
-                            // Puedes agregar cualquier otro campo del usuario que desees incluir aquí, excluyendo el campo de contraseña
+                            'user.email': 1                            
                         }
                     }
                 ]).toArray();
@@ -75,6 +83,42 @@ export const postsService = async (): Promise<PostsService> => {
                 return post.length > 0 ? post[0] : null;
             } catch (error) {
                 throw new Error('Error fetching post by id.');
+            }
+        },
+        createPost: async (quote: string, userId: string): Promise<InsertOneResult | null> => {
+            try {
+                const newPost: Post = {                    
+                    quote,
+                    user_id: new ObjectId(userId),                    
+                    date: new Date(),
+                };
+
+                const result = await postsCollection.insertOne(newPost);
+                if(result.acknowledged){
+                    return result
+                }
+                return null
+            } catch (error) {
+                throw new Error('Error creating post.');
+            }
+        },
+        updatePost: async (postId: ObjectId, updatedQuote: string): Promise<UpdateResult> => {
+            try {                
+                const result = await postsCollection.updateOne(
+                    { _id: postId },
+                    { $set: { quote: updatedQuote } }
+                );
+                return result;
+            } catch (error) {
+                throw new Error('Error updating post.');
+            }
+        },
+        deletePost: async (postId: ObjectId): Promise<DeleteResult> => {
+            try {                
+                const result = await postsCollection.deleteOne({ _id: postId });
+                return result;
+            } catch (error) {
+                throw new Error('Error deleting post.');
             }
         }
     };
