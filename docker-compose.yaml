@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  # Aplicación Node.js
+  node_app:
+    build:
+      context: ./
+      dockerfile: dockerfile
+    ports:
+      - "5000:5000"
+    volumes:
+      - .:/usr/src/app    
+    depends_on:
+      - mongodb
+
+  # MongoDB
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+volumes:
+  mongodb_data:
