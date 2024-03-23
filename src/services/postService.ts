@@ -9,7 +9,7 @@ interface Post {
 }
 
 interface PostsService {
-    getAll: () => Promise<Document[]>;
+    getAll: (page: number, order: string) => Promise<Document[]>;
     findPostById: (postId: ObjectId) => Promise<Document | null>;
     createPost: (quote: string, userId: string) => Promise<InsertOneResult | null>;
     updatePost: (postId: ObjectId, updatedQuote: string) => Promise<UpdateResult | null>;
@@ -21,7 +21,10 @@ export const postsService = async (): Promise<PostsService> => {
     const postsCollection: Collection = db.collection('posts');
     
     return {
-        getAll: async () => {
+        getAll: async (page: number, order: string): Promise<Document[]> => {
+            const pageSize = 3; 
+            const skip = (page - 1) * pageSize;             
+            const sortOrder = order === 'asc' ? 1 : -1;
             try {                
                 const posts = await postsCollection.aggregate([
                     {
@@ -44,6 +47,15 @@ export const postsService = async (): Promise<PostsService> => {
                             'user.name': 1,
                             'user.email': 1
                         }
+                    },
+                    {
+                        $sort: { date: sortOrder }
+                    },
+                    {
+                        $skip: skip 
+                    },
+                    {
+                        $limit: pageSize 
                     }
                 ]).toArray();
 
@@ -52,7 +64,7 @@ export const postsService = async (): Promise<PostsService> => {
                 throw new Error('Error fetching all posts.');
             }
         },
-        findPostById: async (postId: ObjectId) => {
+        findPostById: async (postId: ObjectId): Promise<Document | null> => {
             try {
                 const post = await postsCollection.aggregate([
                     {

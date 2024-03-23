@@ -8,13 +8,17 @@ const logger = buildLogger('postController.ts')
 
 export const findAllPostController = async (req: Request, res: Response) => {
     try {
-        const cachedPosts = cache.get('allPosts');
+        const { page, order } = req.query;
+
+        const cacheKey = `allPosts_${page}_${order}`;
+
+        const cachedPosts = cache.get('cacheKey');
         if (cachedPosts) {
             return res.status(200).json(cachedPosts);
         }
         const service = await postsService();
-        const posts = await service.getAll();
-        cache.set('allPosts', posts, 60);
+        const posts = await service.getAll(Number(page), order as string);
+        cache.set(cacheKey, posts, 60);
         res.status(200).json(posts);
     } catch (error) {
         logger.error(error)
