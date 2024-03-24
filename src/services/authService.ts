@@ -1,7 +1,7 @@
 import { Collection, ObjectId } from 'mongodb';
 import { database } from "../config/configDB";
 
-interface User {
+export interface User {
     _id: ObjectId;
     username: string;
     password: string;

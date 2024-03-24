@@ -9,7 +9,7 @@ const logger = buildLogger('postController.ts')
 export const findAllPostController = async (req: Request, res: Response) => {
     try {
         const { page, order } = req.query;
- 
+
         const cacheKey = `allPosts_${page}_${order}`;
 
         const cachedPosts = cache.get('cacheKey');
@@ -29,12 +29,14 @@ export const findAllPostController = async (req: Request, res: Response) => {
 export const findPostByIdController = async (req: Request, res: Response) => {
     try {
 
-        const cachedPost = cache.get('post');
-        if (cachedPost) {
-            return res.status(200).json(cachedPost);
+        const postId = req.params.id;
+        const cacheKey = `post_${postId}`;
+
+        const cachedPosts = cache.get('cacheKey');
+        if (cachedPosts) {
+            return res.status(200).json(cachedPosts);
         }
 
-        const postId = req.params.id;
         const service = await postsService();
         const postIdObject = new ObjectId(postId);
         const post = await service.findPostById(postIdObject);
@@ -42,7 +44,7 @@ export const findPostByIdController = async (req: Request, res: Response) => {
         if (!post) {
             return res.status(404).json({ error: 'Post not found.' });
         }
-        cache.set('post', post, 60);
+        cache.set(cacheKey, post, 60);
         res.status(200).json(post);
     } catch (error) {
         logger.error(error)
@@ -72,19 +74,21 @@ export const updatePostController = async (req: Request, res: Response) => {
         const { id } = req.params;
         const { quote } = req.body;
 
-        if (!id || !quote) {
-            return res.status(400).json({ error: 'Missing postId or quote in request.' });
-        }
         const postIdObject = new ObjectId(id);
         const service = await postsService();
+        const postFind = await service.findPostById(postIdObject);
+
+        if (!postFind) {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        if (req.user._id.toString() !== postFind.user._id.toString()) {
+            return res.status(400).json({ error: "You are not the author of this post" });
+        }
+
         const result = await service.updatePost(postIdObject, quote);
 
-        if (result && result.modifiedCount === 1) {
-            const postFind = await service.findPostById(postIdObject);
-            res.status(200).json(postFind);
-        } else {
-            return res.status(404).json({ error: 'Post not found or not updated.' });
-        }
+        res.status(200).json({ ...result, user: req.user });
     } catch (error) {
         logger.error(error)
         return res.status(500).json({ error: 'Internal server error.' });
@@ -94,19 +98,25 @@ export const updatePostController = async (req: Request, res: Response) => {
 export const deletePostController = async (req: Request, res: Response) => {
     try {
         const { id } = req.params;
-
-        if (!id) {
-            return res.status(400).json({ error: 'Missing postId in request.' });
-        }
+      
         const postIdObject = new ObjectId(id);
         const service = await postsService();
+
+        const postFind = await service.findPostById(postIdObject);
+
+        if (!postFind) {
+            return res.status(404).json({ error: "Post not found" });
+        }
+
+        if (req.user._id.toString() !== postFind.user._id.toString()) {
+            return res.status(400).json({ error: "You are not the author of this post" });
+        }
         const result = await service.deletePost(postIdObject);
-        
         if (result && result.deletedCount === 1) {
             return res.status(200).json({ message: `Post ${id} deleted successfully.` });
         } else {
             return res.status(404).json({ error: 'Post not found or not deleted.' });
-        }
+        }      
     } catch (error) {
         logger.error(error)
         return res.status(500).json({ error: 'Internal server error.' });

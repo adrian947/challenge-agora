@@ -27,8 +27,8 @@ export const checkAuth = async (req: Request, res: Response, next: NextFunction)
                     .status(400)
                     .json({ msg: "invalid token" });
             }
-
-            req.user = userRecord;
+            const { password: _, ...user } = userRecord;
+            req.user = user;
 
             return next();
         } catch (error) {

@@ -2,12 +2,15 @@
 # Agora-Challenge Node-Typescript
 >Este proyecto consiste en una API CRUD para gestionar publicaciones, donde un usuario autenticado puede consumir endpoints para visualizar, crear, actualizar y eliminar publicaciones. Solo los usuarios logueados pueden editar y eliminar sus propias publicaciones.
 
+### Documentación Postman
+- https://documenter.getpostman.com/view/14487673/2sA35Bc4rS
+
 ## Puntos Destacados del Desafío
 - Base de Datos MongoDB: Se utiliza MongoDB con dos colecciones, users y posts.
 - Paginación de Publicaciones: Las publicaciones están limitadas a 3 por página, lo que requiere navegar la paginación para ver todas ellas. También se incluye una consulta opcional para ordenar las publicaciones por fecha.
 - Autenticación con JWT: Se implementa un middleware que valida la presencia de un JWT válido para interactuar con los endpoints.
 - Validaciones de Datos: Se realizan validaciones para garantizar que se envíen los parámetros adecuados a través de body, params o queries.
-- CORS Configurado: La configuración de CORS está preparada para su uso, solo se deben agregar las URLs permitidas en la lista blanca para interactuar con la API.
+- CORS Configurado: La configuración de CORS está preparada para su uso, solo se deben agregar las URLs permitidas en white list para interactuar con la API.
   
 ## Dependencias Principales
 - Express: Framework de Node.js para construir aplicaciones web y API.
