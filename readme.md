@@ -10,7 +10,7 @@
 - https://challenge-agora.onrender.com
 
 ### Video de la API en funcionamiento
-- https://www.loom.com/share/d1e7e6f0fcba4dd1b76b6d22edf5caec
+- https://www.loom.com/share/b8b0a07cd0aa40cdbf79a59669c31002
 
 ## Puntos Destacados del Desafío
 - Base de Datos MongoDB: Se utiliza MongoDB con dos colecciones, users y posts.
@@ -68,10 +68,6 @@ http://localhost:5000/api/login
     "password": "password1"
 }
 ```
-
-
-
-
 ## Trabajar sin docker (Asegurate de tener una url de conexión de mongo funcionando)
 1- Instalar dependencias 
 ```bash
