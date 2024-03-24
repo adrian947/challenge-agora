@@ -5,6 +5,13 @@
 ### Documentación Postman
 - https://documenter.getpostman.com/view/14487673/2sA35Bc4rS
 
+### Despligue en Render
+>**Nota:** Al ser una capa gratuita el servidor tarda al menos un minuto en estar activo.
+- https://challenge-agora.onrender.com
+
+### Video de la API en funcionamiento
+- https://www.loom.com/share/d1e7e6f0fcba4dd1b76b6d22edf5caec
+
 ## Puntos Destacados del Desafío
 - Base de Datos MongoDB: Se utiliza MongoDB con dos colecciones, users y posts.
 - Paginación de Publicaciones: Las publicaciones están limitadas a 3 por página, lo que requiere navegar la paginación para ver todas ellas. También se incluye una consulta opcional para ordenar las publicaciones por fecha.
