@@ -13,6 +13,7 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
+//! whiteList will contain the front-end address. You can also have a different CORS policy for each route.
 const whitelist = ['http://example1.com', 'http://example2.com']
 const corsOptionsDelegate = function (req: any, callback: any) {
     let corsOptions;
@@ -24,6 +25,7 @@ const corsOptionsDelegate = function (req: any, callback: any) {
   callback(null, corsOptions)
 }
 cors(corsOptionsDelegate)
+
 app.use(express.json());
 app.use('/api', seedRouter);
 app.use('/api', healthRouter);

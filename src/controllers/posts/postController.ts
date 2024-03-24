@@ -9,7 +9,7 @@ const logger = buildLogger('postController.ts')
 export const findAllPostController = async (req: Request, res: Response) => {
     try {
         const { page, order } = req.query;
-
+ 
         const cacheKey = `allPosts_${page}_${order}`;
 
         const cachedPosts = cache.get('cacheKey');

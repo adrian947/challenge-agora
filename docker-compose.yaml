@@ -7,7 +7,7 @@ services:
       context: ./
       dockerfile: dockerfile
     ports:
-      - "5000:5000"
+      - "${PORT}:${PORT}"
     volumes:
       - .:/usr/src/app    
     depends_on:
