@@ -27,10 +27,10 @@ const corsOptionsDelegate = function (req: any, callback: any) {
 cors(corsOptionsDelegate)
 
 app.use(express.json());
-app.use('/api', seedRouter);
-app.use('/api', healthRouter);
-app.use('/api', postsRouter);
-app.use('/api', authRouter);
+app.use(`/api/${process.env.VERSION_API}`, seedRouter);
+app.use(`/api/${process.env.VERSION_API}`, healthRouter);
+app.use(`/api/${process.env.VERSION_API}`, postsRouter);
+app.use(`/api/${process.env.VERSION_API}`, authRouter);
 
 database.connectToDatabase();
 
