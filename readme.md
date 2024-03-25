@@ -83,7 +83,7 @@ npm run build
 ```
 4- Correr aplicacion modo producción.
 ```bash
-npm run build
+npm start
 ```
 
 
