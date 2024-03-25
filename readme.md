@@ -38,7 +38,7 @@ Para ejecutar la aplicación localmente, sigue estos sencillos pasos:
 ```bash
 git clone git@github.com:adrian947/challenge-agora.git
 ```
-2- Dirigete al proyecto cambia el archivo `.env.example` por `.env` (dejo variables de ejemplo, puedes usar las mismas o cambiarlas, pero si deseas usar el contenedor de docker aprovecha la url de conexión)
+2- Dirigete al proyecto cambia el archivo `.env.example` por `.env` (dejo variables de ejemplo, puedes usar las mismas o cambiarlas, pero si deseas usar el contenedor de docker aprovecha la url de conexión para mongoDB)
 
 3- Asegurate de estar dentro de la carpeta del proyecto y ejecuta:
 ```bash
@@ -52,15 +52,15 @@ El servidor correra por defecto en http://localhost:5000
 
 1- Ejecuta este endpoint para verificar el estado de la API.
 ```bash
-http://localhost:5000/api/health
+http://localhost:5000/api/v1/health
 ```
 2- Ejecuta este endpoint para cargar seeders a la base de datos.
 ```bash
-http://localhost:5000/api/seed
+http://localhost:5000/api/v1/seed
 ```
 3- Ejecuta este endpoint para loguearte puedes utilizar el usuario y password que dejo a continuación.
 ```bash
-http://localhost:5000/api/login
+http://localhost:5000/api/v1/login
 ```
 ```json
 {
